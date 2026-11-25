@@ -1,0 +1,1866 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Harry Ilvero — Serviços Digitais, Automação, Web & Sistemas</title>
+
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            surface: {
+              950: '#07090e',
+              900: '#0c1018',
+              800: '#131926',
+              700: '#1c2436',
+            },
+            accent: {
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+            },
+            emeraldTech: {
+              400: '#34d399',
+              500: '#10b981',
+            }
+          },
+          backgroundImage: {
+            'grid-pattern': 'radial-gradient(rgba(56, 189, 248, 0.12) 1px, transparent 1px)',
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    :root {
+      --font-scale: 1;
+    }
+
+    html {
+      font-size: calc(16px * var(--font-scale));
+    }
+
+    body {
+      background-color: #07090e;
+      color: #f1f5f9;
+      font-family: 'Inter', system-ui, sans-serif;
+      overflow-x: hidden;
+    }
+
+    .bg-grid {
+      background-size: 28px 28px;
+      background-image: radial-gradient(rgba(148, 163, 184, 0.12) 1px, transparent 1px);
+    }
+
+    .glass-card {
+      background: rgba(19, 25, 38, 0.84);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(148, 163, 184, 0.16);
+    }
+
+    .glass-card-hover {
+      transition: transform 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .glass-card-hover:hover {
+      transform: translateY(-3px);
+      border-color: rgba(56, 189, 248, 0.45);
+      box-shadow: 0 18px 36px -14px rgba(2, 132, 203, 0.24);
+    }
+
+    /* Modo Alto Contraste */
+    html.high-contrast body {
+      background-color: #000000 !important;
+      color: #ffffff !important;
+      background-image: none !important;
+    }
+
+    html.high-contrast .glass-card,
+    html.high-contrast header,
+    html.high-contrast footer,
+    html.high-contrast .bg-surface-900,
+    html.high-contrast .bg-surface-800,
+    html.high-contrast .bg-surface-950 {
+      background-color: #050505 !important;
+      background-image: none !important;
+      backdrop-filter: none !important;
+      border-color: #ffffff !important;
+      color: #ffffff !important;
+    }
+
+    html.high-contrast .text-slate-300,
+    html.high-contrast .text-slate-400,
+    html.high-contrast .text-slate-500 {
+      color: #f8fafc !important;
+    }
+
+    html.high-contrast a:focus-visible,
+    html.high-contrast button:focus-visible,
+    html.high-contrast input:focus-visible,
+    html.high-contrast select:focus-visible,
+    html.high-contrast textarea:focus-visible {
+      outline: 3px solid #facc15 !important;
+      outline-offset: 2px !important;
+    }
+
+    /* Animações Reduzidas */
+    html.reduced-motion *,
+    html.reduced-motion *::before,
+    html.reduced-motion *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+
+    /* Foco visível universal para acessibilidade */
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible {
+      outline: 2px solid #38bdf8;
+      outline-offset: 2px;
+    }
+
+    /* Custom subtle scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #07090e;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+  </style>
+</head>
+<body class="bg-grid min-h-screen text-slate-100 antialiased selection:bg-sky-500/30 selection:text-sky-200">
+
+  <!-- Link de pular direto ao conteúdo principal para leitores de tela e teclado -->
+  <a
+    href="#conteudo-principal"
+    class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2.5 focus:rounded-xl focus:bg-sky-400 focus:text-slate-950 focus:font-bold"
+  >
+    Ir para o conteúdo principal
+  </a>
+
+  <!-- Toast / Notification Banner (substitui alert/confirm) -->
+  <div id="toast-container" aria-live="polite" class="fixed bottom-20 sm:bottom-5 right-4 sm:right-5 z-50 flex flex-col gap-2.5 max-w-sm w-[calc(100%-2rem)] sm:w-full pointer-events-none"></div>
+
+  <!-- Barra de Acessibilidade Fácil -->
+  <div id="accessibility-bar" class="border-b border-slate-800/90 bg-surface-900/95 text-xs">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2 font-medium text-slate-300">
+        <i data-lucide="accessibility" class="w-4 h-4 text-sky-400 shrink-0"></i>
+        <span>Acessibilidade:</span>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+        <!-- Tamanho da fonte -->
+        <div class="inline-flex items-center rounded-xl bg-surface-800 border border-slate-700/80 overflow-hidden" role="group" aria-label="Tamanho da fonte">
+          <button
+            type="button"
+            onclick="adjustFontScale(-0.1)"
+            class="px-2.5 py-1.5 hover:bg-surface-700 text-slate-200 font-bold cursor-pointer"
+            title="Diminuir tamanho da letra"
+            aria-label="Diminuir tamanho da letra"
+          >
+            A-
+          </button>
+          <span id="font-scale-label" class="px-2 py-1 font-mono text-[11px] text-sky-300 border-x border-slate-700/80">100%</span>
+          <button
+            type="button"
+            onclick="adjustFontScale(0.1)"
+            class="px-2.5 py-1.5 hover:bg-surface-700 text-slate-200 font-bold cursor-pointer"
+            title="Aumentar tamanho da letra"
+            aria-label="Aumentar tamanho da letra"
+          >
+            A+
+          </button>
+        </div>
+
+        <!-- Alto Contraste -->
+        <button
+          type="button"
+          id="btn-high-contrast"
+          onclick="toggleHighContrast()"
+          aria-pressed="false"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-800 hover:bg-surface-700 border border-slate-700/80 text-slate-200 font-medium cursor-pointer transition-colors"
+        >
+          <i data-lucide="contrast" class="w-3.5 h-3.5 text-amber-300"></i>
+          <span>Alto Contraste</span>
+        </button>
+
+        <!-- Animações Reduzidas -->
+        <button
+          type="button"
+          id="btn-reduced-motion"
+          onclick="toggleReducedMotion()"
+          aria-pressed="false"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-800 hover:bg-surface-700 border border-slate-700/80 text-slate-200 font-medium cursor-pointer transition-colors"
+        >
+          <i data-lucide="pause-circle" class="w-3.5 h-3.5 text-purple-300"></i>
+          <span>Menos Movimento</span>
+        </button>
+
+        <!-- Linguagem Simples -->
+        <button
+          type="button"
+          id="btn-simple-language"
+          onclick="toggleSimpleLanguage()"
+          aria-pressed="false"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface-800 hover:bg-surface-700 border border-slate-700/80 text-slate-200 font-medium cursor-pointer transition-colors"
+        >
+          <i data-lucide="sparkles" class="w-3.5 h-3.5 text-emerald-400"></i>
+          <span>Linguagem Simples</span>
+        </button>
+
+        <!-- Resetar acessibilidade -->
+        <button
+          type="button"
+          onclick="resetAccessibility()"
+          class="px-2.5 py-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-surface-800 cursor-pointer transition-colors"
+          title="Restaurar padrões visuais"
+        >
+          Padrão
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <header class="sticky top-0 z-40 border-b border-slate-800/80 bg-surface-950/90 backdrop-blur-md">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 min-h-16 py-2 flex flex-wrap items-center justify-between gap-3">
+      <!-- Brand -->
+      <a href="#topo" class="flex items-center gap-3 group min-w-0">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-400 to-emerald-400 flex items-center justify-center text-slate-950 font-extrabold text-sm shadow-lg shadow-sky-500/20 shrink-0">
+          HI
+        </div>
+        <div class="leading-tight truncate">
+          <span class="block font-bold text-sm sm:text-base tracking-tight text-white group-hover:text-sky-300 transition-colors truncate">
+            Harry Ilvero
+          </span>
+          <span id="nav-subtitle" class="block text-[11px] font-mono text-slate-400 truncate">
+            Automação • Web • Sistemas & Jogos • Visual
+          </span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav aria-label="Navegação principal" class="hidden lg:flex items-center gap-6 text-sm font-medium text-slate-300">
+        <a href="#servicos" class="hover:text-sky-400 transition-colors py-1">Serviços</a>
+        <a href="#etapas" class="hover:text-sky-400 transition-colors py-1">Como Funciona</a>
+        <a href="#solicitar" class="hover:text-sky-400 transition-colors py-1">Pedir Orçamento</a>
+        <a href="#chamados" class="hover:text-sky-400 transition-colors py-1">Acompanhar Pedidos</a>
+        <a href="#faq" class="hover:text-sky-400 transition-colors py-1">Dúvidas</a>
+      </nav>
+
+      <!-- Header CTAs -->
+      <div class="flex items-center gap-2">
+        <button
+          type="button"
+          onclick="copyWhatsApp()"
+          class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2.5 min-h-[44px] rounded-xl bg-surface-800 hover:bg-surface-700 border border-slate-700/80 text-xs font-mono text-slate-200 transition-all cursor-pointer"
+          title="Copiar número do WhatsApp 5541998572968"
+        >
+          <i data-lucide="copy" class="w-3.5 h-3.5 text-emerald-400"></i>
+          <span>41 99857-2968</span>
+        </button>
+
+        <a
+          href="https://wa.me/5541998572968?text=Ol%C3%A1%20Harry%20Ilvero%2C%20vi%20seu%20site%20e%20gostaria%20de%20falar%20sobre%20um%20servi%C3%A7o."
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2.5 min-h-[44px] rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs sm:text-sm transition-all shadow-md shadow-emerald-500/25 cursor-pointer"
+        >
+          <i data-lucide="message-circle" class="w-4 h-4"></i>
+          <span>WhatsApp</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main id="conteudo-principal" class="pb-24 sm:pb-10">
+    <!-- 1. HERO / APRESENTAÇÃO -->
+    <section id="topo" class="relative pt-10 pb-14 sm:pt-16 sm:pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      <div class="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-[680px] h-[340px] rounded-full bg-sky-500/10 blur-3xl"></div>
+
+      <div class="max-w-6xl mx-auto relative">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+          <!-- Coluna Principal -->
+          <div class="lg:col-span-7 space-y-5 sm:space-y-6">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-semibold">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span id="hero-badge-text">Atendimento simples e direto • Celular, tablet e computador</span>
+            </div>
+
+            <h1 id="hero-title" class="text-3xl sm:text-5xl lg:text-[3.25rem] font-extrabold tracking-tight text-white leading-[1.14]">
+              Automação, sites, sistemas e artes digitais feitos para
+              <span class="bg-gradient-to-r from-sky-400 via-cyan-300 to-emerald-400 bg-clip-text text-transparent">
+                facilitar o seu dia a dia.
+              </span>
+            </h1>
+
+            <p id="hero-description" class="text-base sm:text-lg text-slate-300 leading-relaxed max-w-2xl">
+              Sou <strong class="text-white font-semibold">Harry Ilvero</strong>. Ajudo pessoas, criadores e negócios a criarem sites e interfaces web, automatizar tarefas com bots, montar sistemas, jogos ou scripts e produzir edições e identidade visual com combinados claros do início ao fim.
+            </p>
+
+            <!-- Botões Principais de Ação -->
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-1">
+              <a
+                id="hero-whatsapp-cta"
+                href="https://wa.me/5541998572968?text=Ol%C3%A1%20Harry%20Ilvero%2C%20gostaria%20de%20solicitar%20um%20or%C3%A7amento%20pelo%20seu%20site."
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center justify-center gap-2.5 px-6 py-4 min-h-[48px] rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-sm sm:text-base transition-all shadow-lg shadow-emerald-500/25 cursor-pointer"
+              >
+                <i data-lucide="message-circle" class="w-5 h-5"></i>
+                <span>Chamar no WhatsApp (41) 99857-2968</span>
+              </a>
+
+              <a
+                href="#solicitar"
+                class="inline-flex items-center justify-center gap-2 px-6 py-4 min-h-[48px] rounded-2xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-sm sm:text-base transition-all shadow-lg shadow-sky-500/20 cursor-pointer"
+              >
+                <i data-lucide="clipboard-edit" class="w-5 h-5"></i>
+                <span>Solicitar Orçamento</span>
+              </a>
+            </div>
+
+            <!-- Atalhos de Cópia de WhatsApp e E-mail -->
+            <div class="pt-2 flex flex-wrap items-center gap-2.5 text-xs sm:text-sm text-slate-300">
+              <button
+                type="button"
+                onclick="copyWhatsApp()"
+                class="inline-flex items-center gap-2 px-3.5 py-2.5 min-h-[44px] rounded-xl bg-surface-800 hover:bg-surface-700 text-emerald-300 border border-emerald-500/30 transition-colors cursor-pointer font-medium"
+              >
+                <i data-lucide="phone-call" class="w-4 h-4"></i>
+                <span class="font-mono">5541998572968</span>
+                <i data-lucide="copy" class="w-3.5 h-3.5 text-slate-400"></i>
+              </button>
+
+              <button
+                type="button"
+                onclick="copyEmail()"
+                class="inline-flex items-center gap-2 px-3.5 py-2.5 min-h-[44px] rounded-xl bg-surface-800 hover:bg-surface-700 text-sky-300 border border-slate-700/80 transition-colors cursor-pointer font-medium"
+              >
+                <i data-lucide="mail" class="w-4 h-4"></i>
+                <span class="font-mono truncate max-w-[230px] sm:max-w-none">harrisonkauandasilva@gmail.com</span>
+                <i data-lucide="copy" class="w-3.5 h-3.5 text-slate-400"></i>
+              </button>
+
+              <a
+                href="mailto:harrisonkauandasilva@gmail.com?subject=Solicita%C3%A7%C3%A3o%20de%20Servi%C3%A7o%20%E2%80%94%20Harry%20Ilvero"
+                class="inline-flex items-center gap-1.5 px-3.5 py-2.5 min-h-[44px] rounded-xl bg-surface-900 hover:bg-surface-800 text-slate-200 border border-slate-800 transition-colors font-medium"
+              >
+                <i data-lucide="send" class="w-3.5 h-3.5 text-sky-400"></i>
+                <span>Enviar E-mail</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Painel Lateral de Resumo -->
+          <div class="lg:col-span-5">
+            <div class="glass-card rounded-3xl p-6 sm:p-7 space-y-5 shadow-2xl">
+              <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div>
+                  <span class="text-xs font-mono uppercase tracking-wider text-sky-400">Atendimento Simples</span>
+                  <h2 id="side-card-title" class="text-lg font-bold text-white mt-0.5">Como Funciona na Prática</h2>
+                </div>
+                <div class="w-10 h-10 rounded-2xl bg-sky-500/10 border border-sky-500/25 flex items-center justify-center text-sky-400 shrink-0">
+                  <i data-lucide="shield-check" class="w-5 h-5"></i>
+                </div>
+              </div>
+
+              <ul class="space-y-4 text-sm text-slate-300">
+                <li class="flex items-start gap-3">
+                  <div class="w-7 h-7 rounded-lg bg-emerald-500/15 text-emerald-400 flex items-center justify-center shrink-0 mt-0.5 font-mono text-xs font-bold">
+                    01
+                  </div>
+                  <div>
+                    <p id="benefit-1-title" class="font-semibold text-white">Envie seu pedido do seu jeito</p>
+                    <p id="benefit-1-desc" class="text-slate-400 text-xs sm:text-sm mt-0.5">Registre no portal com código de acompanhamento ou abra direto no WhatsApp ou e-mail.</p>
+                  </div>
+                </li>
+                <li class="flex items-start gap-3">
+                  <div class="w-7 h-7 rounded-lg bg-sky-500/15 text-sky-400 flex items-center justify-center shrink-0 mt-0.5 font-mono text-xs font-bold">
+                    02
+                  </div>
+                  <div>
+                    <p id="benefit-2-title" class="font-semibold text-white">Alinhamos escopo, prazo e valor</p>
+                    <p id="benefit-2-desc" class="text-slate-400 text-xs sm:text-sm mt-0.5">Combinamos tudo de forma clara antes de iniciar, sem enrolação ou termos difíceis.</p>
+                  </div>
+                </li>
+                <li class="flex items-start gap-3">
+                  <div class="w-7 h-7 rounded-lg bg-purple-500/15 text-purple-300 flex items-center justify-center shrink-0 mt-0.5 font-mono text-xs font-bold">
+                    03
+                  </div>
+                  <div>
+                    <p id="benefit-3-title" class="font-semibold text-white">Entrega, acompanhamento e acessibilidade</p>
+                    <p id="benefit-3-desc" class="text-slate-400 text-xs sm:text-sm mt-0.5">Você acompanha o status do pedido e pode ajustar letra, contraste e leitura no site.</p>
+                  </div>
+                </li>
+              </ul>
+
+              <!-- Métricas rápidas -->
+              <div class="grid grid-cols-3 gap-2.5 sm:gap-3 pt-2 border-t border-slate-800 text-center">
+                <div class="p-3 rounded-2xl bg-surface-900/90 border border-slate-800/90">
+                  <p class="text-base sm:text-xl font-extrabold text-white">4 Áreas</p>
+                  <p class="text-[11px] text-slate-400">De serviços</p>
+                </div>
+                <div class="p-3 rounded-2xl bg-surface-900/90 border border-slate-800/90">
+                  <p class="text-base sm:text-xl font-extrabold text-sky-400">Celular & PC</p>
+                  <p class="text-[11px] text-slate-400">Responsivo</p>
+                </div>
+                <div class="p-3 rounded-2xl bg-surface-900/90 border border-slate-800/90">
+                  <p class="text-base sm:text-xl font-extrabold text-emerald-400" id="hero-requests-count">0</p>
+                  <p class="text-[11px] text-slate-400">Pedidos ativos</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. CATÁLOGO DE SERVIÇOS -->
+    <section id="servicos" class="py-14 sm:py-20 px-4 sm:px-6 lg:px-8 border-t border-slate-800/70">
+      <div class="max-w-6xl mx-auto">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+          <div>
+            <span class="text-xs font-mono uppercase tracking-widest text-sky-400">O Que Eu Faço</span>
+            <h2 id="services-heading" class="text-2xl sm:text-4xl font-extrabold text-white mt-1">Catálogo de Serviços</h2>
+            <p id="services-subheading" class="text-slate-400 text-sm sm:text-base mt-2 max-w-2xl">
+              Escolha o serviço que combina com a sua necessidade. Clique em <strong>Solicitar este serviço</strong> para preencher o pedido automaticamente.
+            </p>
+          </div>
+          <div class="text-xs font-mono text-slate-300 bg-surface-900 px-3.5 py-2.5 rounded-xl border border-slate-800 self-start md:self-auto">
+            Atendimento remoto • Orçamento claro
+          </div>
+        </div>
+
+        <div id="services-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Renderizado via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. COMO FUNCIONA (3 ETAPAS SIMPLES) -->
+    <section id="etapas" class="py-14 sm:py-20 px-4 sm:px-6 lg:px-8 border-t border-slate-800/70 bg-surface-900/35">
+      <div class="max-w-6xl mx-auto">
+        <div class="mb-10">
+          <span class="text-xs font-mono uppercase tracking-widest text-emerald-400">Passo a Passo</span>
+          <h2 id="steps-heading" class="text-2xl sm:text-4xl font-extrabold text-white mt-1">Como Funciona em 3 Etapas</h2>
+          <p id="steps-subheading" class="text-slate-400 text-sm sm:text-base mt-2 max-w-2xl">
+            Processo direto e transparente para você saber exatamente o que acontece em cada momento do seu pedido.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="glass-card rounded-3xl p-6 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="px-3 py-1 rounded-lg bg-sky-500/15 text-sky-300 font-mono text-xs font-bold">1. Envie seu pedido</span>
+              <span class="text-xs font-mono text-slate-400">Rápido e simples</span>
+            </div>
+            <h3 class="text-xl font-bold text-white">Conte o que você precisa</h3>
+            <p class="text-sm text-slate-300 leading-relaxed">
+              Preencha o formulário do site para gerar um código de acompanhamento ou chame direto no WhatsApp ou e-mail explicando sua ideia com palavras simples.
+            </p>
+          </div>
+
+          <div class="glass-card rounded-3xl p-6 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="px-3 py-1 rounded-lg bg-emerald-500/15 text-emerald-300 font-mono text-xs font-bold">2. Alinhamos escopo e prazo</span>
+              <span class="text-xs font-mono text-slate-400">Combinado claro</span>
+            </div>
+            <h3 class="text-xl font-bold text-white">Definimos entrega, prazo e valor</h3>
+            <p class="text-sm text-slate-300 leading-relaxed">
+              Confirmamos juntos o que será entregue, o prazo estimado e o orçamento antes de começar, evitando surpresas ou alterações sem aviso.
+            </p>
+          </div>
+
+          <div class="glass-card rounded-3xl p-6 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="px-3 py-1 rounded-lg bg-purple-500/15 text-purple-300 font-mono text-xs font-bold">3. Entrega e acompanhamento</span>
+              <span class="text-xs font-mono text-slate-400">Suporte na entrega</span>
+            </div>
+            <h3 class="text-xl font-bold text-white">Receba, teste e acompanhe</h3>
+            <p class="text-sm text-slate-300 leading-relaxed">
+              Acompanhe o status do seu pedido no painel, confira a entrega combinada e receba orientação clara de como usar tudo no seu dia a dia.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. FORMULÁRIO DE SOLICITAÇÃO + WHATSAPP/E-MAIL + PAINEL DE ACOMPANHAMENTO -->
+    <section id="solicitar" class="py-14 sm:py-20 px-4 sm:px-6 lg:px-8 border-t border-slate-800/70">
+      <div class="max-w-6xl mx-auto">
+        <div class="mb-10">
+          <span class="text-xs font-mono uppercase tracking-widest text-sky-400">Solicitação & Acompanhamento</span>
+          <h2 id="request-heading" class="text-2xl sm:text-4xl font-extrabold text-white mt-1">Solicitar Serviço e Acompanhar Pedidos</h2>
+          <p id="request-subheading" class="text-slate-400 text-sm sm:text-base mt-2 max-w-3xl">
+            Envie seu pedido para gerar um código de rastreio salvo no navegador, abra o resumo pronto no WhatsApp ou e-mail, filtre ou pesquise chamados, atualize status e faça backup em JSON ou sincronização via Webhook/API.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <!-- Formulário -->
+          <div class="lg:col-span-5 glass-card rounded-3xl p-6 sm:p-7">
+            <form id="service-request-form" class="space-y-4">
+              <div>
+                <label for="client-name" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+                  Seu Nome ou Empresa *
+                </label>
+                <input
+                  id="client-name"
+                  name="clientName"
+                  type="text"
+                  required
+                  placeholder="Ex.: Ana Paula ou Loja Horizonte"
+                  class="w-full px-4 py-3 min-h-[44px] rounded-xl bg-surface-950/90 border border-slate-700/80 focus:border-sky-400 outline-none text-sm text-white placeholder-slate-500 transition-all"
+                />
+              </div>
+
+              <div>
+                <label for="client-contact" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+                  WhatsApp ou E-mail para Retorno *
+                </label>
+                <input
+                  id="client-contact"
+                  name="clientContact"
+                  type="text"
+                  required
+                  placeholder="Ex.: (41) 99999-0000 ou voce@email.com"
+                  class="w-full px-4 py-3 min-h-[44px] rounded-xl bg-surface-950/90 border border-slate-700/80 focus:border-sky-400 outline-none text-sm text-white placeholder-slate-500 transition-all"
+                />
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label for="service-select" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+                    Tipo de Serviço *
+                  </label>
+                  <select
+                    id="service-select"
+                    name="serviceType"
+                    required
+                    onchange="updateFormSummaryLinks()"
+                    class="w-full px-3.5 py-3 min-h-[44px] rounded-xl bg-surface-950/90 border border-slate-700/80 focus:border-sky-400 outline-none text-sm text-white transition-all"
+                  >
+                    <option value="Automação & Bots">Automação & Bots</option>
+                    <option value="Sites & Interfaces Web">Sites & Interfaces Web</option>
+                    <option value="Sistemas & Jogos / Scripts">Sistemas & Jogos / Scripts</option>
+                    <option value="Edição & Identidade Visual">Edição & Identidade Visual</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label for="budget-range" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+                    Orçamento ou Urgência
+                  </label>
+                  <input
+                    id="budget-range"
+                    name="budgetUrgency"
+                    type="text"
+                    oninput="updateFormSummaryLinks()"
+                    placeholder="Ex.: Até R$ 300 / Esta semana"
+                    class="w-full px-4 py-3 min-h-[44px] rounded-xl bg-surface-950/90 border border-slate-700/80 focus:border-sky-400 outline-none text-sm text-white placeholder-slate-500 transition-all"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label for="project-details" class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+                  Descrição do Pedido *
+                </label>
+                <textarea
+                  id="project-details"
+                  name="details"
+                  rows="4"
+                  required
+                  oninput="updateFormSummaryLinks()"
+                  placeholder="Conte o que você precisa criar, melhorar ou automatizar..."
+                  class="w-full px-4 py-3 rounded-xl bg-surface-950/90 border border-slate-700/80 focus:border-sky-400 outline-none text-sm text-white placeholder-slate-500 transition-all resize-y"
+                ></textarea>
+              </div>
+
+              <div class="flex flex-col gap-2.5 pt-1">
+                <button
+                  type="submit"
+                  id="submit-request-btn"
+                  class="w-full inline-flex items-center justify-center gap-2 px-5 py-3.5 min-h-[48px] rounded-2xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-extrabold text-sm transition-all shadow-lg shadow-sky-500/20 cursor-pointer"
+                >
+                  <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                  <span>Registrar Pedido e Gerar Código</span>
+                </button>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  <a
+                    id="form-whatsapp-btn"
+                    href="https://wa.me/5541998572968?text=Ol%C3%A1%20Harry%20Ilvero%2C%20gostaria%20de%20pedir%20um%20or%C3%A7amento%20de%20Automa%C3%A7%C3%A3o%20%26%20Bots."
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center justify-center gap-2 px-4 py-3 min-h-[44px] rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs sm:text-sm transition-all cursor-pointer"
+                  >
+                    <i data-lucide="message-circle" class="w-4 h-4"></i>
+                    <span>Resumo no WhatsApp</span>
+                  </a>
+
+                  <a
+                    id="form-email-btn"
+                    href="mailto:harrisonkauandasilva@gmail.com?subject=Or%C3%A7amento%20%E2%80%94%20Automa%C3%A7%C3%A3o%20%26%20Bots"
+                    class="inline-flex items-center justify-center gap-2 px-4 py-3 min-h-[44px] rounded-2xl bg-surface-800 hover:bg-surface-700 border border-slate-700 text-sky-300 font-bold text-xs sm:text-sm transition-all cursor-pointer"
+                  >
+                    <i data-lucide="mail" class="w-4 h-4"></i>
+                    <span>Resumo por E-mail</span>
+                  </a>
+                </div>
+              </div>
+            </form>
+
+            <!-- Ferramentas Gratuitas de Backup JSON e Integração Webhook/Cloud -->
+            <div class="mt-6 pt-5 border-t border-slate-800/90 space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-mono uppercase tracking-wider text-emerald-400">Backup JSON & Sincronização</span>
+                <span id="sync-status-badge" class="text-[11px] font-mono text-slate-400">Local ativo</span>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2.5">
+                <button
+                  type="button"
+                  onclick="exportRequestsJSON()"
+                  class="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 min-h-[44px] rounded-xl bg-surface-800 hover:bg-surface-700 border border-slate-700/80 text-xs font-semibold text-slate-200 cursor-pointer transition-colors"
+                >
+                  <i data-lucide="download" class="w-3.5 h-3.5 text-sky-400"></i>
+                  <span>Exportar JSON</span>
+                </button>
+
+                <label class="inline-flex items-center justify-center gap-1.5 px-3 py-2.5 min-h-[44px] rounded-xl bg-surface-800 hover:bg-surface-700 border border-slate-700/80 text-xs font-semibold text-slate-200 cursor-pointer transition-colors">
+                  <i data-lucide="upload" class="w-3.5 h-3.5 text-emerald-400"></i>
+                  <span>Importar JSON</span>
+                  <input
+                    id="import-json-input"
+                    type="file"
+                    accept="application/json,.json"
+                    onchange="importRequestsJSON(event)"
+                    class="sr-only"
+                  />
+                </label>
+              </div>
+
+              <details class="rounded-2xl bg-surface-950/80 border border-slate-800/90 p-3.5 text-xs">
+                <summary class="font-semibold text-slate-200 cursor-pointer select-none flex items-center justify-between min-h-[32px]">
+                  <span>Sincronização Webhook / Nuvem (Opcional)</span>
+                  <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
+                </summary>
+                <div class="mt-3 space-y-2.5 text-slate-300">
+                  <p class="text-[11px] text-slate-400 leading-relaxed">
+                    Envie novos pedidos automaticamente para um Webhook, Google Apps Script ou endpoint REST na nuvem (como Supabase):
+                  </p>
+                  <div>
+                    <label for="webhook-url-input" class="block text-[11px] text-slate-400 mb-1">URL do Webhook / Endpoint</label>
+                    <input
+                      id="webhook-url-input"
+                      type="url"
+                      placeholder="https://script.google.com/macros/s/.../exec ou endpoint REST"
+                      class="w-full px-3 py-2.5 min-h-[44px] rounded-lg bg-surface-900 border border-slate-700 text-xs text-white placeholder-slate-500 outline-none focus:border-sky-400"
+                    />
+                  </div>
+                  <div>
+                    <label for="webhook-apikey-input" class="block text-[11px] text-slate-400 mb-1">Chave / Token (opcional)</label>
+                    <input
+                      id="webhook-apikey-input"
+                      type="password"
+                      placeholder="Opcional"
+                      class="w-full px-3 py-2.5 min-h-[44px] rounded-lg bg-surface-900 border border-slate-700 text-xs text-white placeholder-slate-500 outline-none focus:border-sky-400"
+                    />
+                  </div>
+                  <div class="flex items-center gap-2 pt-1">
+                    <button
+                      type="button"
+                      onclick="saveSyncConfig()"
+                      class="px-3.5 py-2 min-h-[40px] rounded-lg bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs cursor-pointer"
+                    >
+                      Salvar Integração
+                    </button>
+                    <button
+                      type="button"
+                      onclick="clearSyncConfig()"
+                      class="px-3.5 py-2 min-h-[40px] rounded-lg bg-surface-800 hover:bg-surface-700 text-slate-300 text-xs cursor-pointer"
+                    >
+                      Limpar
+                    </button>
+                  </div>
+                </div>
+              </details>
+            </div>
+          </div>
+
+          <!-- Lista & Acompanhamento de Solicitações -->
+          <div id="chamados" class="lg:col-span-7 space-y-4">
+            <div class="glass-card rounded-3xl p-5 sm:p-6 space-y-4">
+              <div class="flex flex-col gap-4 pb-4 border-b border-slate-800">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div>
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                      <i data-lucide="clipboard-list" class="w-5 h-5 text-sky-400"></i>
+                      <span>Acompanhamento de Pedidos</span>
+                    </h3>
+                    <p class="text-xs sm:text-sm text-slate-400 mt-0.5">
+                      Busque por código, nome ou serviço, filtre por status, atualize o andamento ou envie o resumo.
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Campo de busca + Filtros de status -->
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                  <div class="relative flex-1">
+                    <label for="request-search-input" class="sr-only">Buscar pedidos por código, nome ou descrição</label>
+                    <input
+                      id="request-search-input"
+                      type="search"
+                      oninput="handleSearchChange(event)"
+                      placeholder="Buscar por código (ex.: HI-...), nome ou serviço..."
+                      class="w-full px-4 py-2.5 min-h-[44px] rounded-xl bg-surface-950/90 border border-slate-700/80 focus:border-sky-400 outline-none text-xs sm:text-sm text-white placeholder-slate-500 transition-all"
+                    />
+                  </div>
+
+                  <div class="flex flex-wrap items-center gap-1.5" id="status-filter-bar" role="group" aria-label="Filtrar pedidos por status">
+                    <button
+                      type="button"
+                      data-filter="ALL"
+                      class="filter-btn px-3 py-2 min-h-[40px] rounded-xl text-xs font-semibold bg-sky-500 text-slate-950 cursor-pointer transition-colors"
+                    >
+                      Todos
+                    </button>
+                    <button
+                      type="button"
+                      data-filter="pending"
+                      class="filter-btn px-3 py-2 min-h-[40px] rounded-xl text-xs font-semibold bg-surface-800 text-slate-300 hover:bg-surface-700 cursor-pointer transition-colors"
+                    >
+                      Pendente
+                    </button>
+                    <button
+                      type="button"
+                      data-filter="in_review"
+                      class="filter-btn px-3 py-2 min-h-[40px] rounded-xl text-xs font-semibold bg-surface-800 text-slate-300 hover:bg-surface-700 cursor-pointer transition-colors"
+                    >
+                      Em Análise
+                    </button>
+                    <button
+                      type="button"
+                      data-filter="quoted"
+                      class="filter-btn px-3 py-2 min-h-[40px] rounded-xl text-xs font-semibold bg-surface-800 text-slate-300 hover:bg-surface-700 cursor-pointer transition-colors"
+                    >
+                      Orçado
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Contêiner de pedidos -->
+              <div id="requests-list" class="space-y-3.5 max-h-[620px] overflow-y-auto pr-1">
+                <div class="text-center py-10 text-slate-400 text-sm">
+                  Carregando solicitações...
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTATO DIRETO WHATSAPP & E-MAIL -->
+    <section id="contato" class="py-12 px-4 sm:px-6 lg:px-8 border-t border-slate-800/70">
+      <div class="max-w-6xl mx-auto">
+        <div class="glass-card rounded-3xl p-6 sm:p-8 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+          <div class="space-y-1.5">
+            <span class="text-xs font-mono uppercase tracking-wider text-emerald-400">Fale Direto Com Harry Ilvero</span>
+            <h2 class="text-xl sm:text-2xl font-extrabold text-white">Contato direto por WhatsApp ou E-mail</h2>
+            <p class="text-sm text-slate-300 break-all sm:break-normal">
+              WhatsApp: <strong class="font-mono text-emerald-300 select-all">5541998572968</strong> • E-mail: <strong class="font-mono text-sky-300 select-all">harrisonkauandasilva@gmail.com</strong>
+            </p>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-3 w-full lg:w-auto">
+            <a
+              href="https://wa.me/5541998572968?text=Ol%C3%A1%20Harry%20Ilvero%2C%20quero%20tirar%20uma%20d%C3%BAvida%20sobre%20seus%20servi%C3%A7os."
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 py-3 min-h-[44px] rounded-xl bg-emerald-500 hover:bg-emerald-400 text-sm font-bold text-slate-950 transition-all shadow-md shadow-emerald-500/20 cursor-pointer"
+            >
+              <i data-lucide="message-circle" class="w-4 h-4"></i>
+              <span>Abrir WhatsApp</span>
+            </a>
+
+            <button
+              type="button"
+              onclick="copyWhatsApp()"
+              class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 py-3 min-h-[44px] rounded-xl bg-surface-800 hover:bg-surface-700 border border-slate-700 text-sm font-semibold text-white transition-all cursor-pointer"
+            >
+              <i data-lucide="copy" class="w-4 h-4 text-emerald-400"></i>
+              <span>Copiar Número</span>
+            </button>
+
+            <a
+              href="mailto:harrisonkauandasilva@gmail.com?subject=Contato%20%E2%80%94%20Harry%20Ilvero"
+              class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 py-3 min-h-[44px] rounded-xl bg-surface-800 hover:bg-surface-700 border border-slate-700 text-sm font-semibold text-white transition-all"
+            >
+              <i data-lucide="mail" class="w-4 h-4 text-sky-400"></i>
+              <span>Enviar E-mail</span>
+            </a>
+
+            <button
+              type="button"
+              onclick="copyEmail()"
+              class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-4 py-3 min-h-[44px] rounded-xl bg-surface-800 hover:bg-surface-700 border border-slate-700 text-sm font-semibold text-white transition-all cursor-pointer"
+            >
+              <i data-lucide="copy" class="w-4 h-4 text-sky-400"></i>
+              <span>Copiar E-mail</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. FAQ PARA QUEM NÃO ENTENDE DE TECNOLOGIA -->
+    <section id="faq" class="py-14 sm:py-20 px-4 sm:px-6 lg:px-8 border-t border-slate-800/70">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-10">
+          <span class="text-xs font-mono uppercase tracking-widest text-sky-400">Sem Termos Difíceis</span>
+          <h2 id="faq-heading" class="text-2xl sm:text-4xl font-extrabold text-white mt-1">Perguntas Frequentes (FAQ)</h2>
+          <p id="faq-subheading" class="text-slate-400 text-sm sm:text-base mt-2">
+            Explicações simples sobre acordos remotos, atualizações, prazos e contato seguro por WhatsApp ou e-mail.
+          </p>
+        </div>
+
+        <div class="space-y-3.5" id="faq-accordion">
+          <div class="glass-card rounded-2xl overflow-hidden">
+            <button
+              type="button"
+              onclick="toggleFaq(0)"
+              aria-expanded="true"
+              class="w-full px-5 py-4 min-h-[52px] text-left flex items-center justify-between gap-4 font-semibold text-white hover:text-sky-300 transition-colors cursor-pointer"
+            >
+              <span>1. Como funcionam os combinados e acordos de serviço à distância?</span>
+              <i data-lucide="chevron-down" id="faq-icon-0" class="w-5 h-5 text-slate-400 transition-transform shrink-0" style="transform: rotate(180deg);"></i>
+            </button>
+            <div id="faq-panel-0" class="px-5 pb-4 text-sm text-slate-300 leading-relaxed border-t border-slate-800/60 pt-3">
+              Tudo fica registrado por escrito no WhatsApp (<strong class="font-mono text-emerald-300">5541998572968</strong>) ou por e-mail (<strong class="font-mono text-sky-300">harrisonkauandasilva@gmail.com</strong>), além do código do seu pedido no site. Antes de começar, combinamos com clareza o que será entregue, o prazo estimado e o valor.
+            </div>
+          </div>
+
+          <div class="glass-card rounded-2xl overflow-hidden">
+            <button
+              type="button"
+              onclick="toggleFaq(1)"
+              aria-expanded="false"
+              class="w-full px-5 py-4 min-h-[52px] text-left flex items-center justify-between gap-4 font-semibold text-white hover:text-sky-300 transition-colors cursor-pointer"
+            >
+              <span>2. Como fico sabendo das atualizações e do andamento do meu pedido?</span>
+              <i data-lucide="chevron-down" id="faq-icon-1" class="w-5 h-5 text-slate-400 transition-transform shrink-0"></i>
+            </button>
+            <div id="faq-panel-1" class="hidden px-5 pb-4 text-sm text-slate-300 leading-relaxed border-t border-slate-800/60 pt-3">
+              Cada pedido recebe um código de acompanhamento (como <strong class="font-mono text-sky-300">HI-...</strong>) e pode ser acompanhado no painel do site ou por mensagens diretas no WhatsApp e e-mail com prévias, status e orientações de uso.
+            </div>
+          </div>
+
+          <div class="glass-card rounded-2xl overflow-hidden">
+            <button
+              type="button"
+              onclick="toggleFaq(2)"
+              aria-expanded="false"
+              class="w-full px-5 py-4 min-h-[52px] text-left flex items-center justify-between gap-4 font-semibold text-white hover:text-sky-300 transition-colors cursor-pointer"
+            >
+              <span>3. Preciso entender de programação, bots, sistemas ou design?</span>
+              <i data-lucide="chevron-down" id="faq-icon-2" class="w-5 h-5 text-slate-400 transition-transform shrink-0"></i>
+            </button>
+            <div id="faq-panel-2" class="hidden px-5 pb-4 text-sm text-slate-300 leading-relaxed border-t border-slate-800/60 pt-3">
+              Não precisa. Basta explicar o que você quer resolver ou criar no dia a dia. Você também pode ativar o botão <strong>Linguagem Simples</strong> no topo da tela para ver descrições ainda mais diretas.
+            </div>
+          </div>
+
+          <div class="glass-card rounded-2xl overflow-hidden">
+            <button
+              type="button"
+              onclick="toggleFaq(3)"
+              aria-expanded="false"
+              class="w-full px-5 py-4 min-h-[52px] text-left flex items-center justify-between gap-4 font-semibold text-white hover:text-sky-300 transition-colors cursor-pointer"
+            >
+              <span>4. Como ter mais segurança no contato por WhatsApp ou e-mail?</span>
+              <i data-lucide="chevron-down" id="faq-icon-3" class="w-5 h-5 text-slate-400 transition-transform shrink-0"></i>
+            </button>
+            <div id="faq-panel-3" class="hidden px-5 pb-4 text-sm text-slate-300 leading-relaxed border-t border-slate-800/60 pt-3">
+              Fale sempre pelos canais oficiais exibidos nesta página: WhatsApp <strong class="font-mono text-emerald-300">5541998572968</strong> e e-mail <strong class="font-mono text-sky-300">harrisonkauandasilva@gmail.com</strong>. Evite compartilhar senhas pessoais ou dados sensíveis desnecessários durante o orçamento.
+            </div>
+          </div>
+
+          <div class="glass-card rounded-2xl overflow-hidden">
+            <button
+              type="button"
+              onclick="toggleFaq(4)"
+              aria-expanded="false"
+              class="w-full px-5 py-4 min-h-[52px] text-left flex items-center justify-between gap-4 font-semibold text-white hover:text-sky-300 transition-colors cursor-pointer"
+            >
+              <span>5. O site funciona bem no celular e guarda meus pedidos se eu fechar a tela?</span>
+              <i data-lucide="chevron-down" id="faq-icon-4" class="w-5 h-5 text-slate-400 transition-transform shrink-0"></i>
+            </button>
+            <div id="faq-panel-4" class="hidden px-5 pb-4 text-sm text-slate-300 leading-relaxed border-t border-slate-800/60 pt-3">
+              Sim. O layout se adapta a celulares, tablets e computadores, salva os pedidos localmente no navegador e permite <strong>Exportar JSON</strong> ou <strong>Importar JSON</strong> para guardar cópias em arquivo sempre que quiser.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Barra Rápida Fixa no Celular -->
+  <div class="fixed bottom-3 left-3 right-3 z-40 sm:hidden pointer-events-none">
+    <div class="pointer-events-auto grid grid-cols-3 gap-2 p-1.5 rounded-2xl bg-surface-900/95 border border-slate-700/80 shadow-2xl backdrop-blur-md">
+      <a
+        href="#servicos"
+        class="flex items-center justify-center gap-1.5 py-2.5 min-h-[44px] rounded-xl bg-surface-800 text-slate-100 font-bold text-xs"
+      >
+        <i data-lucide="layout-grid" class="w-4 h-4 text-sky-400"></i>
+        <span>Serviços</span>
+      </a>
+      <a
+        href="#solicitar"
+        class="flex items-center justify-center gap-1.5 py-2.5 min-h-[44px] rounded-xl bg-sky-500 text-slate-950 font-extrabold text-xs"
+      >
+        <i data-lucide="clipboard-edit" class="w-4 h-4"></i>
+        <span>Pedir</span>
+      </a>
+      <a
+        href="https://wa.me/5541998572968?text=Ol%C3%A1%20Harry%20Ilvero%2C%20gostaria%20de%20falar%20no%20WhatsApp%20sobre%20um%20servi%C3%A7o."
+        target="_blank"
+        rel="noopener noreferrer"
+        class="flex items-center justify-center gap-1.5 py-2.5 min-h-[44px] rounded-xl bg-emerald-500 text-slate-950 font-extrabold text-xs"
+      >
+        <i data-lucide="message-circle" class="w-4 h-4"></i>
+        <span>WhatsApp</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800/80 bg-surface-950 py-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs sm:text-sm text-slate-400">
+      <div>
+        <strong class="text-white">Harry Ilvero</strong> — Automação, Web, Sistemas & Jogos, Edição e Identidade Visual.
+      </div>
+      <div class="flex flex-wrap items-center gap-4 font-mono text-xs text-slate-400">
+        <a href="https://wa.me/5541998572968" target="_blank" rel="noopener noreferrer" class="text-emerald-400 hover:underline">
+          WhatsApp: 5541998572968
+        </a>
+        <a href="mailto:harrisonkauandasilva@gmail.com" class="text-sky-400 hover:underline break-all sm:break-normal">
+          harrisonkauandasilva@gmail.com
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Lógica da Aplicação, Acessibilidade, WhatsApp/E-mail e Persistência -->
+  <script>
+    const WHATSAPP_NUMBER = "5541998572968";
+    const DIRECT_EMAIL = "harrisonkauandasilva@gmail.com";
+    const STORAGE_KEY_REQUESTS = "harry_ilvero_requests_v1";
+    const STORAGE_KEY_PREFS = "harry_ilvero_a11y_v1";
+    const STORAGE_KEY_SYNC = "harry_ilvero_sync_v1";
+
+    const SERVICES = [
+      {
+        id: "automacao-bots",
+        title: "Automação & Bots",
+        simpleTitle: "Robôs e Programas que Fazem Tarefas Sozinhos",
+        badge: "Automação",
+        icon: "bot",
+        accent: "text-emerald-400 bg-emerald-500/10 border-emerald-500/25",
+        description: "Automação de processos repetitivos, organização de dados/planilhas e bots para agilizar rotinas do dia a dia.",
+        simpleDescription: "Programas que repetem tarefas chatas ou demoradas no lugar de você, economizando tempo.",
+        deliverables: [
+          "Script ou bot configurado e testado",
+          "Automação de rotinas, arquivos ou dados",
+          "Passo a passo simples de como usar"
+        ],
+        turnaround: "2 a 5 dias úteis"
+      },
+      {
+        id: "sites-interfaces-web",
+        title: "Sites & Interfaces Web",
+        simpleTitle: "Sites e Páginas na Internet",
+        badge: "Web & Mobile",
+        icon: "globe",
+        accent: "text-sky-400 bg-sky-500/10 border-sky-500/25",
+        description: "Sites de apresentação, páginas de serviços e interfaces web modernas que funcionam bem em celular e computador.",
+        simpleDescription: "Uma página na internet para apresentar seu trabalho, facilitar contatos e passar confiança.",
+        deliverables: [
+          "Layout adaptado para celular, tablet e PC",
+          "Botões de WhatsApp, e-mail e seções claras",
+          "Estrutura pronta para publicar na web"
+        ],
+        turnaround: "3 a 7 dias úteis"
+      },
+      {
+        id: "sistemas-jogos-scripts",
+        title: "Sistemas & Jogos / Scripts",
+        simpleTitle: "Sistemas, Scripts e Jogos Interativos",
+        badge: "Sistemas & Jogos",
+        icon: "gamepad-2",
+        accent: "text-amber-300 bg-amber-500/10 border-amber-500/25",
+        description: "Sistemas sob medida, scripts úteis e jogos ou protótipos interativos com lógica clara e boa usabilidade.",
+        simpleDescription: "Ferramentas, scripts ou jogos com regras e comandos que ajudam ou divertem de forma prática.",
+        deliverables: [
+          "Lógica, comandos e telas bem estruturados",
+          "Suporte a toque, mouse e teclado conforme o caso",
+          "Prévia para teste e alinhamento"
+        ],
+        turnaround: "5 a 12 dias úteis"
+      },
+      {
+        id: "edicao-identidade-visual",
+        title: "Edição & Identidade Visual",
+        simpleTitle: "Edições, Banners e Estilo Visual",
+        badge: "Visual",
+        icon: "palette",
+        accent: "text-purple-300 bg-purple-500/10 border-purple-500/25",
+        description: "Edição visual, banners, capas, artes de divulgação e organização de identidade visual com leitura limpa.",
+        simpleDescription: "Artes, banners e ajustes visuais bem feitos para divulgar seu perfil, loja ou projeto.",
+        deliverables: [
+          "Peças visuais com bom contraste e leitura",
+          "Formatos adequados para redes e telas",
+          "Ajustes visuais alinhados ao seu estilo"
+        ],
+        turnaround: "1 a 4 dias úteis"
+      }
+    ];
+
+    const STATUS_META = {
+      pending: {
+        label: "Pendente",
+        classes: "bg-amber-500/15 text-amber-300 border-amber-500/30"
+      },
+      in_review: {
+        label: "Em Análise",
+        classes: "bg-sky-500/15 text-sky-300 border-sky-500/30"
+      },
+      quoted: {
+        label: "Orçado",
+        classes: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30"
+      }
+    };
+
+    let requestsState = [];
+    let currentFilter = "ALL";
+    let searchQuery = "";
+    let a11yPrefs = {
+      fontScale: 1,
+      highContrast: false,
+      reducedMotion: false,
+      simpleLanguage: false
+    };
+    let syncConfig = {
+      webhookUrl: "",
+      apiKey: ""
+    };
+
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function generateTrackingCode() {
+      const randomPart = Math.random().toString(36).substring(2, 6).toUpperCase();
+      const timePart = Date.now().toString(36).slice(-3).toUpperCase();
+      return `HI-${timePart}${randomPart}`;
+    }
+
+    function buildWhatsAppUrl(message) {
+      return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+    }
+
+    function buildMailtoUrl(subject, body) {
+      return `mailto:${DIRECT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    }
+
+    window.getServiceWhatsAppUrl = function (serviceTitle) {
+      const msg = `Olá Harry Ilvero, vi seu site e gostaria de solicitar um orçamento de *${serviceTitle}*.`;
+      return buildWhatsAppUrl(msg);
+    };
+
+    window.showToast = function (message, type = "info") {
+      const container = document.getElementById("toast-container");
+      if (!container) return;
+
+      const palette = {
+        success: "bg-surface-800 border-emerald-500/50 text-emerald-200",
+        error: "bg-surface-800 border-rose-500/50 text-rose-200",
+        info: "bg-surface-800 border-sky-500/50 text-sky-100"
+      };
+
+      const toast = document.createElement("div");
+      toast.className = `pointer-events-auto flex items-center justify-between gap-3 px-4 py-3 rounded-2xl border shadow-xl text-xs sm:text-sm font-medium backdrop-blur-md transition-all ${palette[type] || palette.info}`;
+      toast.innerHTML = `<span>${escapeHtml(message)}</span>`;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = "0";
+        toast.style.transform = "translateY(8px)";
+        setTimeout(() => toast.remove(), 220);
+      }, 3400);
+    };
+
+    function copyTextFallback(text, successMsg) {
+      try {
+        const tempInput = document.createElement("input");
+        tempInput.value = text;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempInput);
+        showToast(successMsg, "success");
+      } catch (err) {
+        showToast(text, "info");
+      }
+    }
+
+    window.copyWhatsApp = function () {
+      copyTextFallback(WHATSAPP_NUMBER, `WhatsApp copiado: ${WHATSAPP_NUMBER}`);
+    };
+
+    window.copyEmail = function () {
+      copyTextFallback(DIRECT_EMAIL, `E-mail copiado: ${DIRECT_EMAIL}`);
+    };
+
+    window.copyTrackingCode = function (code) {
+      copyTextFallback(code, `Código copiado: ${code}`);
+    };
+
+    window.toggleFaq = function (index) {
+      const panel = document.getElementById(`faq-panel-${index}`);
+      const icon = document.getElementById(`faq-icon-${index}`);
+      const btn = panel?.previousElementSibling;
+      if (!panel || !icon) return;
+
+      const isHidden = panel.classList.contains("hidden");
+      panel.classList.toggle("hidden", !isHidden);
+      icon.style.transform = isHidden ? "rotate(180deg)" : "rotate(0deg)";
+      if (btn) btn.setAttribute("aria-expanded", String(isHidden));
+    };
+
+    window.selectServiceForRequest = function (serviceTitle) {
+      const selectEl = document.getElementById("service-select");
+      const nameInput = document.getElementById("client-name");
+      if (selectEl) {
+        selectEl.value = serviceTitle;
+        updateFormSummaryLinks();
+      }
+      const targetSection = document.getElementById("solicitar");
+      if (targetSection) {
+        targetSection.scrollIntoView({ behavior: "smooth" });
+      }
+      setTimeout(() => {
+        if (nameInput) nameInput.focus();
+      }, 450);
+      showToast(`Serviço selecionado: ${serviceTitle}`, "info");
+    };
+
+    function formatRequestSummaryText(data) {
+      const lines = [
+        "Olá Harry Ilvero, gostaria de solicitar um orçamento pelo seu site:",
+        data.trackingCode ? `• Código: ${data.trackingCode}` : null,
+        `• Serviço: ${data.serviceType || "Serviço Digital"}`,
+        data.clientName ? `• Nome/Empresa: ${data.clientName}` : null,
+        data.clientContact ? `• Contato: ${data.clientContact}` : null,
+        data.budgetUrgency ? `• Orçamento/Urgência: ${data.budgetUrgency}` : null,
+        data.details ? `• Detalhes: ${data.details}` : null
+      ].filter(Boolean);
+      return lines.join("\n");
+    }
+
+    window.updateFormSummaryLinks = function () {
+      const waBtn = document.getElementById("form-whatsapp-btn");
+      const mailBtn = document.getElementById("form-email-btn");
+
+      const data = {
+        clientName: (document.getElementById("client-name")?.value || "").trim(),
+        clientContact: (document.getElementById("client-contact")?.value || "").trim(),
+        serviceType: document.getElementById("service-select")?.value || "Automação & Bots",
+        budgetUrgency: (document.getElementById("budget-range")?.value || "").trim(),
+        details: (document.getElementById("project-details")?.value || "").trim()
+      };
+
+      const summary = formatRequestSummaryText(data);
+      if (waBtn) {
+        waBtn.href = buildWhatsAppUrl(summary);
+      }
+      if (mailBtn) {
+        mailBtn.href = buildMailtoUrl(
+          `Orçamento — ${data.serviceType}${data.clientName ? ` (${data.clientName})` : ""}`,
+          summary
+        );
+      }
+    };
+
+    /* ---------------- ACESSIBILIDADE ---------------- */
+    function saveA11yPrefs() {
+      try {
+        localStorage.setItem(STORAGE_KEY_PREFS, JSON.stringify(a11yPrefs));
+      } catch (e) {}
+    }
+
+    function applyA11yPrefs() {
+      const clampedScale = Math.min(1.3, Math.max(0.9, Number(a11yPrefs.fontScale.toFixed(2))));
+      a11yPrefs.fontScale = clampedScale;
+      document.documentElement.style.setProperty("--font-scale", String(clampedScale));
+
+      const scaleLabel = document.getElementById("font-scale-label");
+      if (scaleLabel) {
+        scaleLabel.textContent = `${Math.round(clampedScale * 100)}%`;
+      }
+
+      document.documentElement.classList.toggle("high-contrast", Boolean(a11yPrefs.highContrast));
+      const hcBtn = document.getElementById("btn-high-contrast");
+      if (hcBtn) hcBtn.setAttribute("aria-pressed", String(Boolean(a11yPrefs.highContrast)));
+
+      document.documentElement.classList.toggle("reduced-motion", Boolean(a11yPrefs.reducedMotion));
+      const rmBtn = document.getElementById("btn-reduced-motion");
+      if (rmBtn) rmBtn.setAttribute("aria-pressed", String(Boolean(a11yPrefs.reducedMotion)));
+
+      const slBtn = document.getElementById("btn-simple-language");
+      if (slBtn) slBtn.setAttribute("aria-pressed", String(Boolean(a11yPrefs.simpleLanguage)));
+
+      const simple = Boolean(a11yPrefs.simpleLanguage);
+      const heroDesc = document.getElementById("hero-description");
+      const benefit1Title = document.getElementById("benefit-1-title");
+      const benefit1Desc = document.getElementById("benefit-1-desc");
+      const benefit2Title = document.getElementById("benefit-2-title");
+      const benefit2Desc = document.getElementById("benefit-2-desc");
+      const benefit3Title = document.getElementById("benefit-3-title");
+      const benefit3Desc = document.getElementById("benefit-3-desc");
+
+      if (heroDesc) {
+        heroDesc.innerHTML = simple
+          ? 'Sou <strong class="text-white font-semibold">Harry Ilvero</strong>. Faço programas que automatizam tarefas, sites na internet, sistemas ou jogos e artes visuais. Tudo explicado de forma fácil, sem palavras difíceis.'
+          : 'Sou <strong class="text-white font-semibold">Harry Ilvero</strong>. Ajudo pessoas, criadores e negócios a criarem sites e interfaces web, automatizar tarefas com bots, montar sistemas, jogos ou scripts e produzir edições e identidade visual com combinados claros do início ao fim.';
+      }
+
+      if (benefit1Title && benefit1Desc) {
+        benefit1Title.textContent = simple
+          ? "Peça do jeito que for mais fácil para você"
+          : "Envie seu pedido do seu jeito";
+        benefit1Desc.textContent = simple
+          ? "Anote aqui no site com um código ou fale direto no WhatsApp ou e-mail."
+          : "Registre no portal com código de acompanhamento ou abra direto no WhatsApp ou e-mail.";
+      }
+
+      if (benefit2Title && benefit2Desc) {
+        benefit2Title.textContent = simple
+          ? "Combinamos o que será feito, o prazo e o valor"
+          : "Alinhamos escopo, prazo e valor";
+        benefit2Desc.textContent = simple
+          ? "Você sabe antes de começar o que vai receber, quando fica pronto e quanto custa."
+          : "Combinamos tudo de forma clara antes de iniciar, sem enrolação ou termos difíceis.";
+      }
+
+      if (benefit3Title && benefit3Desc) {
+        benefit3Title.textContent = simple
+          ? "Acompanhe o pedido e ajuste a leitura na tela"
+          : "Entrega, acompanhamento e acessibilidade";
+        benefit3Desc.textContent = simple
+          ? "Veja o andamento do pedido no celular ou PC e aumente a letra quando quiser."
+          : "Você acompanha o status do pedido e pode ajustar letra, contraste e leitura no site.";
+      }
+
+      renderServices();
+    }
+
+    window.adjustFontScale = function (delta) {
+      a11yPrefs.fontScale = Number((a11yPrefs.fontScale + delta).toFixed(2));
+      applyA11yPrefs();
+      saveA11yPrefs();
+      showToast(`Tamanho do texto: ${Math.round(a11yPrefs.fontScale * 100)}%`, "info");
+    };
+
+    window.toggleHighContrast = function () {
+      a11yPrefs.highContrast = !a11yPrefs.highContrast;
+      applyA11yPrefs();
+      saveA11yPrefs();
+      showToast(a11yPrefs.highContrast ? "Alto contraste ativado" : "Alto contraste desativado", "info");
+    };
+
+    window.toggleReducedMotion = function () {
+      a11yPrefs.reducedMotion = !a11yPrefs.reducedMotion;
+      applyA11yPrefs();
+      saveA11yPrefs();
+      showToast(a11yPrefs.reducedMotion ? "Movimentos reduzidos ativados" : "Movimentos padrão ativados", "info");
+    };
+
+    window.toggleSimpleLanguage = function () {
+      a11yPrefs.simpleLanguage = !a11yPrefs.simpleLanguage;
+      applyA11yPrefs();
+      saveA11yPrefs();
+      showToast(a11yPrefs.simpleLanguage ? "Linguagem simples ativada" : "Linguagem padrão ativada", "info");
+    };
+
+    window.resetAccessibility = function () {
+      a11yPrefs = {
+        fontScale: 1,
+        highContrast: false,
+        reducedMotion: false,
+        simpleLanguage: false
+      };
+      applyA11yPrefs();
+      saveA11yPrefs();
+      showToast("Configurações de acessibilidade restauradas", "info");
+    };
+
+    function loadA11yPrefs() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY_PREFS);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          a11yPrefs = { ...a11yPrefs, ...parsed };
+        }
+      } catch (e) {}
+      applyA11yPrefs();
+    }
+
+    /* ---------------- CATÁLOGO DE SERVIÇOS ---------------- */
+    function renderServices() {
+      const grid = document.getElementById("services-grid");
+      if (!grid) return;
+
+      const simple = Boolean(a11yPrefs.simpleLanguage);
+
+      grid.innerHTML = SERVICES.map((service) => {
+        const titleText = simple ? service.simpleTitle : service.title;
+        const descText = simple ? service.simpleDescription : service.description;
+        const waUrl = window.getServiceWhatsAppUrl(service.title);
+
+        return `
+          <article class="glass-card glass-card-hover rounded-3xl p-6 flex flex-col justify-between gap-5">
+            <div class="space-y-4">
+              <div class="flex items-start justify-between gap-3">
+                <div class="w-11 h-11 rounded-2xl border flex items-center justify-center shrink-0 ${service.accent}">
+                  <i data-lucide="${service.icon}" class="w-5 h-5"></i>
+                </div>
+                <span class="px-3 py-1 rounded-full bg-surface-900 border border-slate-800 text-xs font-mono text-slate-300">
+                  ${escapeHtml(service.badge)}
+                </span>
+              </div>
+
+              <div>
+                <h3 class="text-xl font-bold text-white">${escapeHtml(titleText)}</h3>
+                <p class="text-sm text-slate-300 mt-1.5 leading-relaxed">${escapeHtml(descText)}</p>
+              </div>
+
+              <div class="space-y-2 pt-1">
+                <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">O que está incluído:</p>
+                <ul class="space-y-1.5 text-xs sm:text-sm text-slate-300">
+                  ${service.deliverables.map((item) => `
+                    <li class="flex items-start gap-2">
+                      <i data-lucide="check" class="w-4 h-4 text-emerald-400 shrink-0 mt-0.5"></i>
+                      <span>${escapeHtml(item)}</span>
+                    </li>
+                  `).join("")}
+                </ul>
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div class="text-xs text-slate-400">
+                Prazo estimado: <strong class="text-slate-200 font-mono">${escapeHtml(service.turnaround)}</strong>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <button
+                  type="button"
+                  onclick="selectServiceForRequest('${escapeHtml(service.title)}')"
+                  class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 min-h-[44px] rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold text-xs sm:text-sm transition-all cursor-pointer"
+                >
+                  <span>Solicitar este serviço</span>
+                </button>
+
+                <a
+                  href="${waUrl}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 min-h-[44px] rounded-xl bg-emerald-500/15 hover:bg-emerald-500 text-emerald-300 hover:text-slate-950 border border-emerald-500/30 font-bold text-xs sm:text-sm transition-all cursor-pointer"
+                  aria-label="Chamar no WhatsApp sobre ${escapeHtml(service.title)}"
+                >
+                  <i data-lucide="message-circle" class="w-4 h-4"></i>
+                  <span class="sm:hidden">WhatsApp</span>
+                </a>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    }
+
+    /* ---------------- PERSISTÊNCIA LOCAL, JSON & WEBHOOK/CLOUD ---------------- */
+    function saveRequestsLocal() {
+      try {
+        localStorage.setItem(STORAGE_KEY_REQUESTS, JSON.stringify(requestsState));
+      } catch (e) {
+        console.error("Erro ao salvar no localStorage:", e);
+      }
+    }
+
+    function loadRequestsLocal() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY_REQUESTS);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) {
+            requestsState = parsed.map((item) => ({
+              ...item,
+              trackingCode: item.trackingCode || generateTrackingCode()
+            }));
+          }
+        }
+      } catch (e) {
+        requestsState = [];
+      }
+    }
+
+    function loadSyncConfig() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY_SYNC);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          syncConfig = { ...syncConfig, ...parsed };
+        }
+      } catch (e) {}
+
+      const urlInput = document.getElementById("webhook-url-input");
+      const keyInput = document.getElementById("webhook-apikey-input");
+      const badge = document.getElementById("sync-status-badge");
+
+      if (urlInput) urlInput.value = syncConfig.webhookUrl || "";
+      if (keyInput) keyInput.value = syncConfig.apiKey || "";
+      if (badge) {
+        badge.textContent = syncConfig.webhookUrl ? "Local + Webhook/Nuvem" : "Local ativo";
+        badge.className = syncConfig.webhookUrl
+          ? "text-[11px] font-mono text-emerald-400"
+          : "text-[11px] font-mono text-slate-400";
+      }
+    }
+
+    window.saveSyncConfig = function () {
+      const urlInput = document.getElementById("webhook-url-input");
+      const keyInput = document.getElementById("webhook-apikey-input");
+      const urlVal = (urlInput?.value || "").trim();
+      const keyVal = (keyInput?.value || "").trim();
+
+      if (urlVal && !/^https?:\/\//i.test(urlVal)) {
+        showToast("Informe uma URL válida começando com http:// ou https://", "error");
+        return;
+      }
+
+      syncConfig = { webhookUrl: urlVal, apiKey: keyVal };
+      try {
+        localStorage.setItem(STORAGE_KEY_SYNC, JSON.stringify(syncConfig));
+      } catch (e) {}
+      loadSyncConfig();
+      showToast(urlVal ? "Configuração de sincronização salva!" : "Sincronização desativada.", "success");
+    };
+
+    window.clearSyncConfig = function () {
+      syncConfig = { webhookUrl: "", apiKey: "" };
+      try {
+        localStorage.removeItem(STORAGE_KEY_SYNC);
+      } catch (e) {}
+      loadSyncConfig();
+      showToast("Configuração de integração removida.", "info");
+    };
+
+    async function dispatchToExternalEndpoint(record) {
+      if (!syncConfig.webhookUrl) return;
+
+      const headers = { "Content-Type": "application/json" };
+      if (syncConfig.apiKey) {
+        headers["apikey"] = syncConfig.apiKey;
+        headers["Authorization"] = `Bearer ${syncConfig.apiKey}`;
+      }
+
+      try {
+        await fetch(syncConfig.webhookUrl, {
+          method: "POST",
+          headers,
+          body: JSON.stringify(record)
+        });
+      } catch (err) {
+        console.warn("Envio externo não concluído (verifique CORS/endpoint):", err);
+      }
+    }
+
+    window.exportRequestsJSON = function () {
+      try {
+        const payload = {
+          owner: "Harry Ilvero",
+          whatsapp: WHATSAPP_NUMBER,
+          email: DIRECT_EMAIL,
+          exportedAt: new Date().toISOString(),
+          requests: requestsState
+        };
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `pedidos-harry-ilvero-${new Date().toISOString().slice(0, 10)}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast("Backup JSON exportado com sucesso!", "success");
+      } catch (err) {
+        showToast("Não foi possível exportar o JSON.", "error");
+      }
+    };
+
+    window.importRequestsJSON = function (event) {
+      const file = event?.target?.files?.[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        try {
+          const parsed = JSON.parse(String(e.target?.result || "{}"));
+          const importedList = Array.isArray(parsed)
+            ? parsed
+            : Array.isArray(parsed.requests)
+              ? parsed.requests
+              : null;
+
+          if (!importedList) {
+            showToast("Arquivo JSON inválido para lista de pedidos.", "error");
+            return;
+          }
+
+          const existingIds = new Set(requestsState.map((item) => item.id));
+          let addedCount = 0;
+
+          importedList.forEach((item) => {
+            if (!item || !item.clientName || !item.details) return;
+            const candidateId = item.id || `imp-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
+            if (!existingIds.has(candidateId)) {
+              existingIds.add(candidateId);
+              requestsState.push({
+                id: candidateId,
+                trackingCode: item.trackingCode || generateTrackingCode(),
+                clientName: String(item.clientName),
+                clientContact: String(item.clientContact || ""),
+                serviceType: String(item.serviceType || "Automação & Bots"),
+                budgetUrgency: String(item.budgetUrgency || item.targetTimeline || ""),
+                details: String(item.details),
+                status: STATUS_META[item.status] ? item.status : "pending",
+                createdAt: Number(item.createdAt) || Date.now()
+              });
+              addedCount += 1;
+            }
+          });
+
+          saveRequestsLocal();
+          renderRequests();
+          showToast(
+            addedCount > 0
+              ? `${addedCount} pedido(s) importado(s) do JSON!`
+              : "Nenhum pedido novo encontrado no JSON.",
+            "success"
+          );
+        } catch (err) {
+          showToast("Erro ao ler o arquivo JSON.", "error");
+        } finally {
+          event.target.value = "";
+        }
+      };
+      reader.readAsText(file);
+    };
+
+    window.handleSearchChange = function (event) {
+      searchQuery = String(event?.target?.value || "").trim().toLowerCase();
+      renderRequests();
+    };
+
+    window.updateRequestStatus = function (id, newStatus) {
+      if (!STATUS_META[newStatus]) return;
+      const idx = requestsState.findIndex((item) => item.id === id);
+      if (idx === -1) return;
+
+      requestsState[idx].status = newStatus;
+      saveRequestsLocal();
+      renderRequests();
+      showToast(`Status atualizado para: ${STATUS_META[newStatus].label}`, "success");
+    };
+
+    window.deleteRequestItem = function (id) {
+      const beforeCount = requestsState.length;
+      requestsState = requestsState.filter((item) => item.id !== id);
+      if (requestsState.length !== beforeCount) {
+        saveRequestsLocal();
+        renderRequests();
+        showToast("Pedido removido do painel.", "info");
+      }
+    };
+
+    function updateCounter() {
+      const counterEl = document.getElementById("hero-requests-count");
+      if (counterEl) {
+        counterEl.textContent = String(requestsState.length);
+      }
+    }
+
+    function renderRequests() {
+      updateCounter();
+      const listEl = document.getElementById("requests-list");
+      if (!listEl) return;
+
+      const filtered = requestsState.filter((item) => {
+        const matchesStatus = currentFilter === "ALL" || item.status === currentFilter;
+        if (!matchesStatus) return false;
+        if (!searchQuery) return true;
+
+        const haystack = [
+          item.trackingCode,
+          item.clientName,
+          item.clientContact,
+          item.serviceType,
+          item.budgetUrgency,
+          item.details
+        ]
+          .join(" ")
+          .toLowerCase();
+
+        return haystack.includes(searchQuery);
+      });
+
+      const sorted = [...filtered].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+
+      if (sorted.length === 0) {
+        listEl.innerHTML = `
+          <div class="text-center py-10 px-4 rounded-2xl bg-surface-950/60 border border-slate-800/80">
+            <p class="text-slate-300 font-medium text-sm">Nenhum pedido encontrado com esse filtro ou busca.</p>
+            <p class="text-slate-500 text-xs mt-1">Preencha o formulário ao lado para gerar um código ou importe um arquivo JSON.</p>
+          </div>
+        `;
+        return;
+      }
+
+      listEl.innerHTML = sorted.map((item) => {
+        const meta = STATUS_META[item.status] || STATUS_META.pending;
+        const formattedDate = new Date(item.createdAt || Date.now()).toLocaleString("pt-BR", {
+          day: "2-digit",
+          month: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit"
+        });
+        const code = item.trackingCode || "HI-0000";
+        const budgetText = item.budgetUrgency || item.targetTimeline || "";
+        const summaryText = formatRequestSummaryText({
+          trackingCode: code,
+          clientName: item.clientName,
+          clientContact: item.clientContact,
+          serviceType: item.serviceType,
+          budgetUrgency: budgetText,
+          details: item.details
+        });
+        const waUrl = buildWhatsAppUrl(summaryText);
+        const mailUrl = buildMailtoUrl(`Pedido ${code} — ${item.serviceType}`, summaryText);
+
+        return `
+          <article class="p-4 sm:p-5 rounded-2xl bg-surface-950/85 border border-slate-800/90 space-y-3">
+            <div class="flex flex-wrap items-start justify-between gap-2.5">
+              <div class="space-y-1 min-w-0">
+                <div class="flex flex-wrap items-center gap-2">
+                  <button
+                    type="button"
+                    onclick="copyTrackingCode('${escapeHtml(code)}')"
+                    class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-sky-500/15 hover:bg-sky-500/25 text-sky-300 border border-sky-500/30 font-mono text-xs font-bold cursor-pointer"
+                    title="Copiar código de acompanhamento"
+                  >
+                    <span>${escapeHtml(code)}</span>
+                    <i data-lucide="copy" class="w-3 h-3"></i>
+                  </button>
+                  <h4 class="font-bold text-white text-sm sm:text-base truncate">${escapeHtml(item.clientName)}</h4>
+                </div>
+                <p class="text-xs font-mono text-sky-300">${escapeHtml(item.serviceType)}</p>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-1 rounded-full border text-xs font-semibold ${meta.classes}">
+                  ${escapeHtml(meta.label)}
+                </span>
+                <span class="text-[11px] font-mono text-slate-400">${escapeHtml(formattedDate)}</span>
+              </div>
+            </div>
+
+            <p class="text-xs sm:text-sm text-slate-300 leading-relaxed whitespace-pre-line">${escapeHtml(item.details)}</p>
+
+            <div class="flex flex-wrap items-center gap-3 text-xs text-slate-400 pt-1">
+              ${item.clientContact ? `<span>Contato: <strong class="text-slate-200">${escapeHtml(item.clientContact)}</strong></span>` : ""}
+              ${budgetText ? `<span>Orçamento/Prazo: <strong class="text-emerald-300">${escapeHtml(budgetText)}</strong></span>` : ""}
+            </div>
+
+            <div class="pt-3 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2.5">
+              <div class="flex items-center gap-2">
+                <label for="status-select-${escapeHtml(item.id)}" class="text-xs text-slate-400">Status:</label>
+                <select
+                  id="status-select-${escapeHtml(item.id)}"
+                  onchange="updateRequestStatus('${escapeHtml(item.id)}', this.value)"
+                  class="px-2.5 py-1.5 min-h-[38px] rounded-xl bg-surface-800 border border-slate-700 text-xs font-semibold text-white outline-none focus:border-sky-400 cursor-pointer"
+                >
+                  <option value="pending" ${item.status === "pending" ? "selected" : ""}>Pendente</option>
+                  <option value="in_review" ${item.status === "in_review" ? "selected" : ""}>Em Análise</option>
+                  <option value="quoted" ${item.status === "quoted" ? "selected" : ""}>Orçado</option>
+                </select>
+              </div>
+
+              <div class="flex flex-wrap items-center gap-2">
+                <a
+                  href="${waUrl}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[38px] rounded-xl bg-emerald-500/15 hover:bg-emerald-500 text-emerald-300 hover:text-slate-950 border border-emerald-500/30 text-xs font-bold transition-colors"
+                >
+                  <i data-lucide="message-circle" class="w-3.5 h-3.5"></i>
+                  <span>WhatsApp</span>
+                </a>
+
+                <a
+                  href="${mailUrl}"
+                  class="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[38px] rounded-xl bg-surface-800 hover:bg-surface-700 text-sky-300 border border-slate-700 text-xs font-semibold transition-colors"
+                >
+                  <i data-lucide="mail" class="w-3.5 h-3.5"></i>
+                  <span>E-mail</span>
+                </a>
+
+                <button
+                  type="button"
+                  onclick="deleteRequestItem('${escapeHtml(item.id)}')"
+                  class="inline-flex items-center gap-1 px-2.5 py-1.5 min-h-[38px] rounded-xl bg-surface-800 hover:bg-rose-500/20 text-slate-400 hover:text-rose-300 border border-slate-700/70 text-xs transition-colors cursor-pointer"
+                  title="Excluir pedido"
+                  aria-label="Excluir pedido ${escapeHtml(code)}"
+                >
+                  <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    }
+
+    function initFilterButtons() {
+      const buttons = document.querySelectorAll(".filter-btn");
+      buttons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          currentFilter = btn.getAttribute("data-filter") || "ALL";
+          buttons.forEach((b) => {
+            const active = b.getAttribute("data-filter") === currentFilter;
+            b.className = active
+              ? "filter-btn px-3 py-2 min-h-[40px] rounded-xl text-xs font-semibold bg-sky-500 text-slate-950 cursor-pointer transition-colors"
+              : "filter-btn px-3 py-2 min-h-[40px] rounded-xl text-xs font-semibold bg-surface-800 text-slate-300 hover:bg-surface-700 cursor-pointer transition-colors";
+          });
+          renderRequests();
+        });
+      });
+    }
+
+    function initRequestForm() {
+      const form = document.getElementById("service-request-form");
+      if (!form) return;
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const clientName = (document.getElementById("client-name")?.value || "").trim();
+        const clientContact = (document.getElementById("client-contact")?.value || "").trim();
+        const serviceType = (document.getElementById("service-select")?.value || "Automação & Bots").trim();
+        const budgetUrgency = (document.getElementById("budget-range")?.value || "").trim();
+        const details = (document.getElementById("project-details")?.value || "").trim();
+
+        if (!clientName || !clientContact || !details) {
+          showToast("Preencha nome, contato e descrição do pedido.", "error");
+          return;
+        }
+
+        const trackingCode = generateTrackingCode();
+        const newRecord = {
+          id: `req-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+          trackingCode,
+          clientName,
+          clientContact,
+          serviceType,
+          budgetUrgency,
+          details,
+          status: "pending",
+          createdAt: Date.now()
+        };
+
+        requestsState.push(newRecord);
+        saveRequestsLocal();
+        renderRequests();
+        await dispatchToExternalEndpoint(newRecord);
+
+        form.reset();
+        updateFormSummaryLinks();
+        showToast(`Pedido registrado! Código de acompanhamento: ${trackingCode}`, "success");
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+      loadA11yPrefs();
+      loadSyncConfig();
+      loadRequestsLocal();
+      initFilterButtons();
+      initRequestForm();
+      updateFormSummaryLinks();
+      renderRequests();
+    });
+  </script>
+</body>
+</html>
